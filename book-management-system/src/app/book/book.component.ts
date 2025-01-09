@@ -13,6 +13,7 @@ export class BookComponent implements OnInit{
   newBookAuthor : string = "";
 
   books: Book[] = []
+  editIndex: number | null = null; 
 
   ngOnInit(): void {
     let savedBooks = localStorage.getItem("books")
@@ -38,4 +39,23 @@ export class BookComponent implements OnInit{
   deleteBook(index: number){
     this.books.splice(index, 1)
   }
+
+  editBook(index: number) {
+    this.editIndex = index; 
+    this.newBookTitle = this.books[index].title; 
+    this.newBookAuthor = this.books[index].author; 
+    this.books.splice(index, 1)
+  }
+
+  updateBook() {
+    if (this.editIndex !== null) {
+      this.books[this.editIndex].title = this.newBookTitle;
+      this.books[this.editIndex].author = this.newBookAuthor;
+      this.editIndex = null; 
+      this.newBookTitle = "";
+      this.newBookAuthor = "";
+      localStorage.setItem("books", JSON.stringify(this.books)); 
+    }
+  }
+
 }
